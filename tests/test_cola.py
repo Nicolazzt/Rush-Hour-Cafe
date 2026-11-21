@@ -1,5 +1,5 @@
 import unittest
-from estructuras.cola import Cola, ColaVaciaError
+from estructuras.cola import Cola, ErrorColaVacia
 
 class TestCola(unittest.TestCase):
     def test_cola_vacia(self):
@@ -18,12 +18,12 @@ class TestCola(unittest.TestCase):
 
     def test_desencolar_cola_vacia(self):
         c = Cola()
-        with self.assertRaises(ColaVaciaError):
+        with self.assertRaises(ErrorColaVacia):
             c.desencolar()
 
     def test_ver_frente_cola_vacia_error(self):
         c = Cola()
-        with self.assertRaises(ColaVaciaError):
+        with self.assertRaises(ErrorColaVacia):
             c.ver_frente()
 
     def  test_ver_frente_no_saca_al_primero(self):
