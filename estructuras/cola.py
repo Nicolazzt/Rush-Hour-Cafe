@@ -1,4 +1,4 @@
-class ColaVaciaError(Exception):
+class ErrorColaVacia(Exception):
     pass
 
 
@@ -33,7 +33,7 @@ class Cola:
 
     def desencolar(self): #self._final = None
         if self.estaVacia():
-            raise ColaVaciaError("La cola esta vacía")
+            raise ErrorColaVacia("La cola esta vacía")
         else:
             temp = self._frente
             self._frente = self._frente.siguiente
@@ -48,7 +48,7 @@ class Cola:
 
     def ver_frente(self):
         if self.estaVacia():
-            raise ColaVaciaError("La cola esta vacía")
+            raise ErrorColaVacia("La cola esta vacía")
 
         return self._frente.dato
 
