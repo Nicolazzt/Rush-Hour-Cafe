@@ -1,5 +1,5 @@
 import unittest
-from modelo.Cliente import (Cliente, ClienteTranquilo,
+from modelo.cliente import (cliente, ClienteTranquilo,
                             ClienteExigente, ClienteApurado)
 from modelo.enums import FaseCliente
 
@@ -8,7 +8,7 @@ class TestCliente(unittest.TestCase):
 
     def test_cliente_abstracto_no_se_instancia(self):
         with self.assertRaises(TypeError):
-            Cliente()
+            cliente()
 
     def test_nacen_en_cola(self):
         for clase in (ClienteTranquilo, ClienteExigente, ClienteApurado):
