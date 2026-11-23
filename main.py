@@ -1,13 +1,17 @@
 from modelo.mesa import mesa
-from modelo.cliente import ClienteTranquilo
+from modelo.pedido import pedido
 
-m = mesa(1)
-print(m.estado)          # esperado: EstadoMesa.LIBRE
-print(m.cliente)         # esperado: None
+p = pedido(mesa(1))
+p.enviar_a_cocina()
+p.descartar()
+print(p.estado)       # esperado: EstadoPedido.DESCARTADO
 
-c = ClienteTranquilo()
-m.sentar(c)
-print(m.estado)          # esperado: EstadoMesa.OCUPADA
-print(m.cliente is c)    # esperado: True
+p.descartar()         
 
-m.sentar(ClienteTranquilo())    # esperado: ErrorMesaOcupada
+p2 = pedido(mesa(2))
+p2.enviar_a_cocina()
+p2.empezar_a_cocinar()
+p2.poner_en_mostrador()
+p2.recoger()
+p2.entregar()
+p2.descartar()        # esperado: ErrorAccionInvalida (ya está en la mesa)
