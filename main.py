@@ -1,9 +1,13 @@
+from modelo.mesa import mesa
 from modelo.cliente import ClienteTranquilo
 
-t = ClienteTranquilo()
-t.avanzar(5);    t.siguiente_fase()
-t.avanzar(4.8);  t.siguiente_fase()
-t.avanzar(22.5); t.siguiente_fase()
-t.avanzar(15)
-t.avanzar(6);    t.siguiente_fase()
-print(t.satisfaccion())    # esperado: 65, o muy cerca
+m = mesa(1)
+print(m.estado)          # esperado: EstadoMesa.LIBRE
+print(m.cliente)         # esperado: None
+
+c = ClienteTranquilo()
+m.sentar(c)
+print(m.estado)          # esperado: EstadoMesa.OCUPADA
+print(m.cliente is c)    # esperado: True
+
+m.sentar(ClienteTranquilo())    # esperado: ErrorMesaOcupada
