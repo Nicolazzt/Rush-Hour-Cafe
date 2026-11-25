@@ -1,7 +1,7 @@
 from modelo.enums import EstadoPedido
 from modelo.excepciones import ErrorAccionInvalida
 
-class pedido:
+class Pedido:
     ESTADOS_DESCARTABLES = (EstadoPedido.ANOTADO,EstadoPedido.EN_COCINA,EstadoPedido.COCINANDOSE,EstadoPedido.EN_MOSTRADOR,EstadoPedido.EN_CAMINO_A_MESA)
     def __init__(self, mesa):
         self._estado = EstadoPedido.ANOTADO

@@ -1,17 +1,17 @@
-from modelo.mesa import mesa
-from modelo.pedido import pedido
+from modelo.mesa import Mesa
+from modelo.cliente import ClienteTranquilo
+from modelo.mesera import Mesera
+from modelo.acciones import TomarPedido
 
-p = pedido(mesa(1))
-p.enviar_a_cocina()
-p.descartar()
-print(p.estado)       # esperado: EstadoPedido.DESCARTADO
+m = Mesa(1)
+c = ClienteTranquilo()
+m.sentar(c)
+c.siguiente_fase()           # a mano: lo pasa a LEYENDO_MENU
 
-p.descartar()         
-
-p2 = pedido(mesa(2))
-p2.enviar_a_cocina()
-p2.empezar_a_cocinar()
-p2.poner_en_mostrador()
-p2.recoger()
-p2.entregar()
-p2.descartar()        # esperado: ErrorAccionInvalida (ya está en la mesa)
+mesera = Mesera()
+a = TomarPedido(m)
+a.validar(mesera)            # esperado: no pasa nada
+a.ejecutar(mesera)
+print(len(mesera.comandas))  # esperado: 1
+print(c.fase)                # esperado: FaseCliente.ESPERANDO_COMIDA
+a.validar(mesera)            # esperado: ErrorAccionInvalida
