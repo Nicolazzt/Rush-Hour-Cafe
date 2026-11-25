@@ -1,16 +1,16 @@
 import pygame
 from ui.dibujo import dibujar_mesa
-from modelo.mesa import mesa 
+from modelo.mesa import Mesa 
 from modelo.cliente import ClienteTranquilo
 pygame.init()
 
 pantalla = pygame.display.set_mode((920,480))
 clock = pygame.time.Clock()
 run = True
-mesa1 = mesa(1)
-mesa2 = mesa(2)
-mesa3 = mesa(3)
-mesa4 = mesa(4)
+mesa1 = Mesa(1)
+mesa2 = Mesa(2)
+mesa3 = Mesa(3)
+mesa4 = Mesa(4)
 cliente1 = ClienteTranquilo()
 
 mesa2.sentar(cliente1)

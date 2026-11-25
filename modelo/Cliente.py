@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from constants import (PROPINA_EXCELENTE,PROPINA_NORMAL,UMBRAL_EXCELENTE,UMBRAL_NORMAL)
 from modelo.enums import FaseCliente
 
-class cliente(ABC):
+class Cliente(ABC):
     def __init__(self):
        self._fase = FaseCliente.EN_COLA
        self._tiempo_restante_de_fase = self.TIEMPOS_FASE[self._fase]
@@ -12,6 +12,10 @@ class cliente(ABC):
     @abstractmethod
     def calcular_propina(self,satisfaccion):
         pass
+
+    @property
+    def fase(self):
+        return self._fase
 
 
     def avanzar(self, seg_transcurridos):
@@ -45,7 +49,7 @@ class cliente(ABC):
 
 
 
-class ClienteTranquilo(cliente):
+class ClienteTranquilo(Cliente):
     TIEMPOS_FASE= {
         FaseCliente.EN_COLA: 25,
         FaseCliente.LEYENDO_MENU: 12,
@@ -65,11 +69,11 @@ class ClienteTranquilo(cliente):
         return base * 1.0
 
 
-class ClienteExigente(cliente):
+class ClienteExigente(Cliente):
     TIEMPOS_FASE= {
         FaseCliente.EN_COLA: 15,
         FaseCliente.LEYENDO_MENU: 8,
-        FaseCliente.ESPERANDO_COMIDA: 0,
+        FaseCliente.ESPERANDO_COMIDA: 30,
         FaseCliente.COMIENDO: 12,
         FaseCliente.ESPERANDO_CUENTA: 12
     }
@@ -78,8 +82,10 @@ class ClienteExigente(cliente):
     def calcular_propina(self,satisfaccion):
         if satisfaccion > UMBRAL_EXCELENTE:
             return PROPINA_EXCELENTE * 2.0
+        else:
+            return 0
 
-class ClienteApurado(cliente):
+class ClienteApurado(Cliente):
     TIEMPOS_FASE= {
         FaseCliente.EN_COLA: 10,
         FaseCliente.LEYENDO_MENU: 5,

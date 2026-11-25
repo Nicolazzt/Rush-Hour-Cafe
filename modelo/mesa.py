@@ -1,7 +1,7 @@
 from modelo.enums import EstadoMesa
 from modelo.excepciones import ErrorMesaOcupada
 
-class mesa:
+class Mesa:
     def __init__(self, numero):
         self._estado = EstadoMesa.LIBRE
         self._numero = numero
