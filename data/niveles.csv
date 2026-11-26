@@ -1,0 +1,4 @@
+id,nombre,duracion,meta,max_perdidos,mesas_min,mesas_max,llegada_min,llegada_max,prep_min,prep_max,prob_tranquilo,prob_exigente,prob_apurado,items
+1,pequena,300,700,6,4,4,20,25,3,5,0.7,0.0,0.3,cafetera
+2,mediana,300,950,5,6,7,15,20,3,5,0.4,0.4,0.2,cafetera;postre
+3,grande,300,1400,4,10,10,10,15,3,5,0.2,0.4,0.4,cafetera;postre;snack
