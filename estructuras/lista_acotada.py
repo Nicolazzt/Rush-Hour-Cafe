@@ -31,5 +31,8 @@ class ListaAcotada:
     def contiene(self,elemento):
         return elemento in self._elementos
 
+    def __iter__(self):
+        return iter(self._elementos)
+
 
  
