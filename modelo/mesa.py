@@ -6,11 +6,20 @@ class Mesa:
         self._estado = EstadoMesa.LIBRE
         self._numero = numero
         self._cliente = None
+        self._pedido_en_mesa = None
 
 
     @property
     def estado(self):
         return self._estado
+
+    @property
+    def pedido_en_mesa(self):
+        return self._pedido_en_mesa
+
+    @property
+    def numero(self):
+        return self._numero
 
 
     @property
@@ -28,9 +37,13 @@ class Mesa:
     def liberar(self):
         self._estado = EstadoMesa.LIBRE
         self._cliente = None
+        self._pedido_en_mesa = None
 
     def ensuciar(self):   
         self._estado = EstadoMesa.SUCIA
         self._cliente = None
+
+    def asignar_pedido(self,pedido):
+        self._pedido_en_mesa = pedido
 
 
