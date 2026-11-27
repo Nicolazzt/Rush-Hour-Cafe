@@ -2,23 +2,25 @@ import random
 from modelo.mesa import Mesa
 from modelo.pedido import Pedido
 from modelo.mesera import Mesera
-from modelo.acciones import DejarComandas
+from modelo.acciones import RecogerPlato
 from modelo.cocina_mostrador import Cocina, Mostrador
 
 mesera = Mesera()
-cocina = Cocina(Mostrador())
-p1, p2 = Pedido(Mesa(1)), Pedido(Mesa(2))
-mesera.comandas.agregar(p1)
-mesera.comandas.agregar(p2)
-
-a = DejarComandas(cocina)
-a.validar(mesera)                  # esperado: no pasa nada
-a.ejecutar(mesera)
-print(len(mesera.comandas))        # esperado: 0
-print(p1.estado, p2.estado)        # esperado: EN_COCINA EN_COCINA
+mostrador = Mostrador()
+cocina = Cocina(mostrador)
+m1, m2, m3 = Mesa(1), Mesa(2), Mesa(3)
+p1, p2, p3 = Pedido(m1), Pedido(m2), Pedido(m3)
+for p in (p1, p2, p3):
+    cocina.pedido_a_cocina(p)
 
 random.seed(1)
-for _ in range(200):
-    cocina.actualizar(0.1)         # 20 segundos simulados
-print(p1.estado, p2.estado)        # esperado: EN_MOSTRADOR EN_MOSTRADOR
+for _ in range(300):
+    cocina.actualizar(0.1)
+
+a = RecogerPlato(m2, mostrador)
+a.validar(mesera)                  # esperado: no pasa nada
+a.ejecutar(mesera)
+print(len(mesera.bandejas))        # esperado: 1
+print(p1.estado, p2.estado, p3.estado)
+# esperado: EN_MOSTRADOR EN_CAMINO_A_MESA EN_MOSTRADOR
 a.validar(mesera)                  # esperado: ErrorAccionInvalida
