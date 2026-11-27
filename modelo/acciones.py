@@ -5,6 +5,7 @@ from modelo.pedido import Pedido, EstadoPedido
 from modelo.cocina_mostrador import Cocina, Mostrador
 
 
+
 class Accion(ABC):
     @abstractmethod
     def validar(self,Mesera):
@@ -105,6 +106,29 @@ class DejarComandas(Accion):
             self._cocina.pedido_a_cocina(comanda)
             mesera.comandas.eliminar(comanda)
             comanda = self._buscar_comanda(mesera)
+
+
+class RecogerPlato(Accion):
+    def __init__(self, mesa, mostrador):
+        self._mesa = mesa
+        self._mostrador = mostrador
+
+    def validar(self, mesera):
+        if mesera.bandejas.estaLlena():
+            raise ErrorAccionInvalida("La mesera se encuentra muy llena")
+
+        if self._mostrador.buscar_por_mesa(self._mesa) is None:
+            raise ErrorAccionInvalida("La mesa no tiene plato disponible")
+
+    def ejecutar(self, mesera):
+        plato = self._mostrador.buscar_por_mesa(self._mesa)
+        plato.recoger()
+        self._mostrador.retirar_plato(plato)
+        mesera.bandejas.agregar(plato)
+
+
+
+
 
 
 
