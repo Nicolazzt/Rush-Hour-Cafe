@@ -1,26 +1,37 @@
 import random
 from modelo.mesa import Mesa
-from modelo.pedido import Pedido
+from modelo.cliente import ClienteTranquilo
 from modelo.mesera import Mesera
-from modelo.acciones import RecogerPlato
+from modelo.caja import Caja
 from modelo.cocina_mostrador import Cocina, Mostrador
+from modelo.acciones import (TomarPedido, DejarComandas, RecogerPlato,
+                             EntregarPlato, Cobrar, RecogerSucio, LlevarAlTraste)
 
-mesera = Mesera()
-mostrador = Mostrador()
-cocina = Cocina(mostrador)
-m1, m2, m3 = Mesa(1), Mesa(2), Mesa(3)
-p1, p2, p3 = Pedido(m1), Pedido(m2), Pedido(m3)
-for p in (p1, p2, p3):
-    cocina.pedido_a_cocina(p)
+def hacer(accion, mesera):
+    accion.validar(mesera)      # siempre se valida primero
+    accion.ejecutar(mesera)
 
 random.seed(1)
-for _ in range(300):
-    cocina.actualizar(0.1)
+mesera, caja = Mesera(), Caja()
+mostrador = Mostrador()
+cocina = Cocina(mostrador)
+mesa = Mesa(1)
+cliente = ClienteTranquilo()
+mesa.sentar(cliente)
+cliente.siguiente_fase()            # a LEYENDO_MENU (lo hará el motor)
 
-a = RecogerPlato(m2, mostrador)
-a.validar(mesera)                  # esperado: no pasa nada
-a.ejecutar(mesera)
-print(len(mesera.bandejas))        # esperado: 1
-print(p1.estado, p2.estado, p3.estado)
-# esperado: EN_MOSTRADOR EN_CAMINO_A_MESA EN_MOSTRADOR
-a.validar(mesera)                  # esperado: ErrorAccionInvalida
+hacer(TomarPedido(mesa), mesera)
+hacer(DejarComandas(cocina), mesera)
+for _ in range(100):
+    cocina.actualizar(0.1)          # 10 s: el chef termina
+hacer(RecogerPlato(mesa, mostrador), mesera)
+hacer(EntregarPlato(mesa), mesera)
+cliente.avanzar(15)                 # termina de comer y pasa a ESPERANDO_CUENTA
+hacer(Cobrar(mesa, caja), mesera)
+print(caja.dinero)                  # esperado: 80.0
+print(mesa.estado)                  # esperado: EstadoMesa.SUCIA
+hacer(RecogerSucio(mesa), mesera)
+print(mesa.estado)                  # esperado: EstadoMesa.LIBRE
+print(len(mesera.bandejas))         # esperado: 1
+hacer(LlevarAlTraste(), mesera)
+print(len(mesera.bandejas))         # esperado: 0

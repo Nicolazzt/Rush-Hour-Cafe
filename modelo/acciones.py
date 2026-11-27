@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 from modelo.excepciones import ErrorAccionInvalida
-from modelo.enums import FaseCliente
-from modelo.pedido import Pedido, EstadoPedido
-from modelo.cocina_mostrador import Cocina, Mostrador
+from modelo.enums import FaseCliente,EstadoMesa
+from modelo.pedido import Pedido
+from modelo.enums import EstadoPedido
+from modelo.caja import Caja
+from constants import PRECIO_PLATO
 
 
 
@@ -60,6 +62,7 @@ class EntregarPlato(Accion):
         pedido = self._buscar_pedido(mesera)
         mesera.bandejas.eliminar(pedido)
         pedido.entregar()
+        self._mesa.asignar_pedido(pedido)
 
         self._mesa.cliente.siguiente_fase()
 
@@ -125,6 +128,59 @@ class RecogerPlato(Accion):
         plato.recoger()
         self._mostrador.retirar_plato(plato)
         mesera.bandejas.agregar(plato)
+
+
+class Cobrar(Accion):
+    def __init__(self, mesa, caja):
+        self._mesa = mesa
+        self._caja = caja
+
+    def validar(self, mesera):
+        if self._mesa.cliente is None:
+            raise ErrorAccionInvalida("No hay clientes en esta mesa")
+
+        if self._mesa.cliente.fase != FaseCliente.ESPERANDO_CUENTA:
+            raise ErrorAccionInvalida("El cliente no esta esperando la cuenta")
+
+    def ejecutar(self, mesera):
+        self._mesa.cliente.siguiente_fase()
+        satisfaccion = self._mesa.cliente.satisfaccion()
+
+        MontoTotal = PRECIO_PLATO + self._mesa.cliente.calcular_propina(satisfaccion)
+
+        self._caja.insertar(MontoTotal)
+
+        self._mesa.ensuciar()
+
+       
+
+
+class RecogerSucio(Accion):
+    def __init__(self, mesa):
+        self._mesa = mesa
+
+    def validar(self, mesera):
+        if mesera.bandejas.estaLlena():
+            raise ErrorAccionInvalida("La mesera se encuentra muy llena")
+
+        if self._mesa.estado != EstadoMesa.SUCIA:
+            raise ErrorAccionInvalida("La mesa esta limpia")
+
+        if self._mesa.pedido_en_mesa is None:
+            raise ErrorAccionInvalida("No hay pedido en la mesa")
+
+    def ejecutar(self, mesera):
+        pedido = self._mesa.pedido_en_mesa
+        pedido.retirar_sucio()
+        mesera.bandejas.agregar(pedido)
+        self._mesa.liberar()
+
+
+   
+
+
+
+
 
 
 
