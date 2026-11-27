@@ -1,0 +1,4 @@
+tipo,multiplicador,pac_cola,pac_menu,pac_comida,pac_cuenta,tiempo_comiendo
+tranquilo,1.0,25,12,45,20,15
+exigente,2.0,15,8,30,12,12
+apurado,3.0,10,5,20,8,9

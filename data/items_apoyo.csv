@@ -1,0 +1,4 @@
+nombre,efecto_pct,propina_extra,usos,recarga,objetivo
+cafetera,40,0,-1,20,cliente
+postre,80,10,3,0,cliente
+snack,20,0,-1,35,filan
