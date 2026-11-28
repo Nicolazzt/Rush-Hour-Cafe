@@ -1,8 +1,12 @@
+#Para calcular propina del cliente
 PROPINA_EXCELENTE = 30
 PROPINA_NORMAL = 10
 UMBRAL_EXCELENTE = 70
 UMBRAL_NORMAL = 30
+
+#Economía del juego
 PRECIO_PLATO = 50
+TIEMPO_VIAJE = 1.5
 
 #Para las listas acotadas
 COMANDAS_EN_MANO = 2
